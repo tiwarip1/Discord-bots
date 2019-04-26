@@ -1,12 +1,5 @@
-import os
-exists = os.path.isfile('bitchlog.txt')
+import pandas as pd
 
-bitches = []
+nouns = pd.read_csv('nouns.txt')
 
-if exists:
-    with open('bitchlog.txt','r') as f:
-        for i in f:
-            bitches.append(i)
-            
-print(bitches)            
-        
+print(nounts.head())

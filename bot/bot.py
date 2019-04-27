@@ -2,6 +2,9 @@ import discord
 import shlex
 import string
 import os
+import pandas as pd
+import random
+import time
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -34,8 +37,23 @@ class MyClient(discord.Client):
             self.update_bitch_list(arguments[1])
             print(self.bitches)
             await message.channel.send('{} was added to the bitch pile'.format(arguments[1]))
+        elif message.content.startswith('<@571047329784660040>'):
+            self.take_words()
+            await message.channel.send('{}, you {} {} {}'.format(arguments[-1],self.used_adjective,self.used_noun,self.used_curses))
         else:
             print(arguments)
+
+    def take_words(self):
+        nouns = pd.read_csv('nouns.txt')
+        adjectives = pd.read_csv('adjectives.txt')
+        curses = pd.read_csv('curses.txt')
+
+        nouns_len = len(nouns.columns)
+        adjectives_len = len(adjectives.columns)
+        curses_len = len(curses.columns)
+        self.used_noun = nouns.sample().values[0][0].lower()
+        self.used_adjective = adjectives.sample().values[0][0].lower()
+        self.used_curses = curses.sample().values[0][0].lower()
 
     def update_bitch_list(self,addition):
         with open('bitchlog.txt','a') as f:
@@ -50,7 +68,6 @@ class MyClient(discord.Client):
                 for i in f:
                     self.bitches.append(i[:-1])
                     
-        print(self.bitches)
 
 client = MyClient()
 client.run('NTcxMDQ3MzI5Nzg0NjYwMDQw.XMIEtg.Db2-LkVoh5PIUZNpS0OT_WifUuY')

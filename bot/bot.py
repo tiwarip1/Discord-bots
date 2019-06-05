@@ -6,6 +6,8 @@ import pandas as pd
 import random
 import time
 
+from insult import make_insult
+
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged in as')
@@ -38,8 +40,13 @@ class MyClient(discord.Client):
             print(self.bitches)
             await message.channel.send('{} was added to the bitch pile'.format(arguments[1]))
         elif message.content.startswith('<@571047329784660040>'):
-            self.take_words()
-            await message.channel.send('{}, you {} {} {}'.format(arguments[-1],self.used_adjective,self.used_noun,self.used_curses))
+            if arguments[1].translate(str.maketrans('', '', string.punctuation)).lower()=='insult':
+                self.take_words()
+                await message.channel.send('{}, you {} {} {}'.format(arguments[-1],self.used_adjective,self.used_noun,self.used_curses))
+            elif arguments[1].translate(str.maketrans('', '', string.punctuation)).lower()=='old' and arguments[2].translate(str.maketrans('', '', string.punctuation)).lower()=='insult':
+                words = make_insult()
+                await message.channel.send('{}, you {} {} {}'.format(arguments[-1],word[0],word[1],word[2]))
+
         else:
             print(arguments)
 
